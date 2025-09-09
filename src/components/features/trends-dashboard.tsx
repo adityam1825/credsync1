@@ -2,7 +2,7 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartTooltipContent } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 
 const chartData = [
   { claim: 'Claim A', reports: 4000 },
@@ -20,25 +20,32 @@ export default function TrendsDashboard() {
         <CardDescription>Top circulating unverified claims reported by the community.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 10 }}>
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-            <XAxis type="number" hide />
-            <YAxis
-              dataKey="claim"
-              type="category"
-              tickLine={false}
-              axisLine={false}
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-              width={60}
-            />
-            <Tooltip 
-                cursor={{ fill: 'hsl(var(--muted))' }}
-                content={<ChartTooltipContent indicator="dot" />}
-             />
-            <Bar dataKey="reports" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+        <ChartContainer config={{
+          reports: {
+            label: 'Reports',
+            color: 'hsl(var(--primary))',
+          },
+        }} className="w-full h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 10 }}>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <XAxis type="number" hide />
+              <YAxis
+                dataKey="claim"
+                type="category"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                width={60}
+              />
+              <Tooltip 
+                  cursor={{ fill: 'hsl(var(--muted))' }}
+                  content={<ChartTooltipContent indicator="dot" />}
+               />
+              <Bar dataKey="reports" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartContainer>
       </CardContent>
     </Card>
   );
