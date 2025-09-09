@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { AnalyzeTextNewsContentOutputSchema } from '@/ai/schema';
 
 const AnalyzeTextNewsContentInputSchema = z.object({
   text: z
@@ -17,13 +18,6 @@ const AnalyzeTextNewsContentInputSchema = z.object({
 });
 export type AnalyzeTextNewsContentInput = z.infer<typeof AnalyzeTextNewsContentInputSchema>;
 
-const AnalyzeTextNewsContentOutputSchema = z.object({
-  classification: z
-    .enum(['true', 'fake', 'misleading'])
-    .describe('The classification of the news content.'),
-  reasoning: z.string().describe('The detailed reasoning behind the classification.'),
-  proofLinks: z.array(z.string()).describe('Verified proof links to support the classification.'),
-});
 export type AnalyzeTextNewsContentOutput = z.infer<typeof AnalyzeTextNewsContentOutputSchema>;
 
 export async function analyzeTextNewsContent(input: AnalyzeTextNewsContentInput): Promise<AnalyzeTextNewsContentOutput> {

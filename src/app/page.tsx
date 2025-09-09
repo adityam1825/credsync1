@@ -2,6 +2,7 @@ import Header from '@/components/layout/header';
 import TextAnalyzer from '@/components/features/text-analyzer';
 import ImageAnalyzer from '@/components/features/image-analyzer';
 import UrlAnalyzer from '@/components/features/url-analyzer';
+import AudioAnalyzer from '@/components/features/audio-analyzer';
 import NewsFeed from '@/components/features/news-feed';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
@@ -13,10 +14,11 @@ export default function Home() {
       <main className="flex flex-1 flex-col gap-8 p-4 md:p-8 container mx-auto">
         <div className="w-full">
             <Tabs defaultValue="text" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="text">Text Analyzer</TabsTrigger>
                 <TabsTrigger value="image">Image Analyzer</TabsTrigger>
                 <TabsTrigger value="url">URL Analyzer</TabsTrigger>
+                <TabsTrigger value="audio">Audio Analyzer</TabsTrigger>
               </TabsList>
               <TabsContent value="text">
                 <TextAnalyzer />
@@ -26,6 +28,9 @@ export default function Home() {
               </TabsContent>
               <TabsContent value="url">
                 <UrlAnalyzer />
+              </TabsContent>
+              <TabsContent value="audio">
+                <AudioAnalyzer />
               </TabsContent>
             </Tabs>
         </div>
