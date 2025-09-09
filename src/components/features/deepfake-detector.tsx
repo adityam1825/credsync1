@@ -82,10 +82,14 @@ export default function DeepfakeDetector() {
   const classificationStyle = result ? classificationMap[result.classification] : null;
 
   return (
-    <Card className="w-full">
-      <CardContent className="space-y-6 pt-6">
+    <Card className="w-full h-full">
+        <CardHeader>
+            <CardTitle className="text-2xl">Deepfake Detector</CardTitle>
+            <CardDescription>Upload an image to check if it's AI-generated or manipulated.</CardDescription>
+        </CardHeader>
+      <CardContent className="space-y-4">
         <div 
-            className="relative flex flex-col items-center justify-center w-full p-6 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted"
+            className="relative flex flex-col items-center justify-center w-full p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted"
             onClick={() => fileInputRef.current?.click()}
         >
             <Input
@@ -109,7 +113,7 @@ export default function DeepfakeDetector() {
                             setResult(JSON.parse(JSON.stringify(result)));
                           }
                         }}
-                        className="rounded-md object-contain max-h-60"
+                        className="rounded-md object-contain max-h-48"
                         data-ai-hint="uploaded content"
                     />
                     {result?.tamperedRegions && result.tamperedRegions.map((region, index) => {
@@ -148,7 +152,7 @@ export default function DeepfakeDetector() {
                     })}
                 </div>
             ) : (
-                <div className="text-center">
+                <div className="text-center py-8">
                     <UploadCloud className="w-12 h-12 mx-auto text-muted-foreground" />
                     <p className="mt-2 text-sm text-muted-foreground">Click to upload or drag and drop</p>
                     <p className="text-xs text-muted-foreground">PNG, JPG, GIF up to 10MB</p>
@@ -162,46 +166,46 @@ export default function DeepfakeDetector() {
         </Button>
 
         {loading && (
-            <div className="mt-6 flex flex-col items-center justify-center space-y-2 text-center">
+            <div className="flex flex-col items-center justify-center space-y-2 text-center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="text-muted-foreground">AI is running forensic analysis... this may take a moment.</p>
+                <p className="text-muted-foreground">AI is running forensic analysis...</p>
             </div>
         )}
         {error && (
-            <Alert variant="destructive" className="mt-6">
+            <Alert variant="destructive">
                 <FileWarning className="h-4 w-4" />
                 <AlertTitle>Analysis Failed</AlertTitle>
                 <AlertDescription>{error}</AlertDescription>
             </Alert>
         )}
         {result && (
-          <div className="mt-6 space-y-4 animate-in fade-in-50 duration-500">
+          <div className="space-y-4 animate-in fade-in-50 duration-500">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    {ClassificationIcon && <ClassificationIcon className={`h-6 w-6 text-white ${classificationStyle?.color} rounded-full p-1`} />}
-                    Analysis Result: <Badge variant="outline" className={`border-none text-white ${classificationStyle?.color}`}>{classificationStyle?.text}</Badge>
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                    {ClassificationIcon && <ClassificationIcon className={`h-5 w-5 text-white ${classificationStyle?.color} rounded-full p-0.5`} />}
+                    Result: <Badge variant="outline" className={`border-none text-white ${classificationStyle?.color}`}>{classificationStyle?.text}</Badge>
                 </CardTitle>
                  <div className="pt-2">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Confidence Score</h3>
+                    <h3 className="text-xs font-medium text-muted-foreground mb-1">Confidence Score</h3>
                     <div className="flex items-center gap-2">
-                        <Progress value={result.confidenceScore} className="w-full h-2" />
-                        <span className="font-semibold text-sm">{result.confidenceScore}%</span>
+                        <Progress value={result.confidenceScore} className="w-full h-1.5" />
+                        <span className="font-semibold text-xs">{result.confidenceScore}%</span>
                     </div>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-3 text-sm pt-4">
                  <div>
-                    <h3 className="font-semibold flex items-center gap-2 mb-2"><Scale className="h-4 w-4 text-primary" />Reasoning</h3>
-                    <p className="text-sm text-muted-foreground">{result.reasoning}</p>
+                    <h3 className="font-semibold flex items-center gap-2 mb-1"><Scale className="h-4 w-4 text-primary" />Reasoning</h3>
+                    <p className="text-xs text-muted-foreground">{result.reasoning}</p>
                  </div>
                  {result.tamperedRegions && result.tamperedRegions.length > 0 && (
                     <div>
-                        <h3 className="font-semibold flex items-center gap-2 mb-2"><Wand2 className="h-4 w-4 text-primary" />Tampered Regions</h3>
-                        <p className="text-sm text-muted-foreground">The highlighted areas on the image above indicate potential manipulation.</p>
-                        <ul className="list-disc list-inside mt-2 space-y-1">
+                        <h3 className="font-semibold flex items-center gap-2 mb-1"><Wand2 className="h-4 w-4 text-primary" />Tampered Regions</h3>
+                        <p className="text-xs text-muted-foreground">Highlighted areas on the image indicate potential manipulation.</p>
+                        <ul className="list-disc list-inside mt-1 space-y-1">
                           {result.tamperedRegions.map((region, index) => (
-                            <li key={index} className="text-sm text-muted-foreground">{region.description}</li>
+                            <li key={index} className="text-xs text-muted-foreground">{region.description}</li>
                           ))}
                         </ul>
                     </div>

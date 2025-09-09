@@ -7,49 +7,64 @@ import NewsFeed from '@/components/features/news-feed';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import DeepfakeDetector from '@/components/features/deepfake-detector';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Newspaper } from 'lucide-react';
 
 export default function Home() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
-      <main className="flex flex-1 flex-col gap-8 p-4 md:p-8 container mx-auto">
-        <div className="w-full">
-            <Tabs defaultValue="text" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="text">Text Analyzer</TabsTrigger>
-                <TabsTrigger value="image">Image Analyzer</TabsTrigger>
-                <TabsTrigger value="url">URL Analyzer</TabsTrigger>
-                <TabsTrigger value="audio">Audio Analyzer</TabsTrigger>
-              </TabsList>
-              <TabsContent value="text">
-                <TextAnalyzer />
-              </TabsContent>
-              <TabsContent value="image">
-                <ImageAnalyzer />
-              </TabsContent>
-              <TabsContent value="url">
-                <UrlAnalyzer />
-              </TabsContent>
-              <TabsContent value="audio">
-                <AudioAnalyzer />
-              </TabsContent>
-            </Tabs>
-        </div>
-        
-        <Separator />
+      <main className="flex-1 space-y-8 p-4 md:p-8 container mx-auto">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+          <Card className="lg:col-span-3">
+            <CardHeader>
+                <CardTitle>Analysis Tools</CardTitle>
+                <CardDescription>Select a tool to analyze content for misinformation.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="text" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+                  <TabsTrigger value="text">Text</TabsTrigger>
+                  <TabsTrigger value="image">Image</TabsTrigger>
+                  <TabsTrigger value="url">URL</TabsTrigger>
+                  <TabsTrigger value="audio">Audio</TabsTrigger>
+                </TabsList>
+                <TabsContent value="text">
+                  <TextAnalyzer />
+                </TabsContent>
+                <TabsContent value="image">
+                  <ImageAnalyzer />
+                </TabsContent>
+                <TabsContent value="url">
+                  <UrlAnalyzer />
+                </TabsContent>
+                <TabsContent value="audio">
+                  <AudioAnalyzer />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
 
-        <div className="space-y-4">
-            <h2 className="text-3xl font-bold tracking-tight">Deepfake Media Detector</h2>
-            <p className="text-muted-foreground">Upload an image to check if it's AI-generated or manipulated. The AI will perform a forensic analysis to detect inconsistencies.</p>
+          <div className="lg:col-span-2">
             <DeepfakeDetector />
+          </div>
         </div>
 
-        <Separator />
-
-        <div className="space-y-4">
-          <h2 className="text-3xl font-bold tracking-tight">Fact-Checked News Feed</h2>
-          <p className="text-muted-foreground">A curated feed of short-form, verified news to keep you accurately informed.</p>
-          <NewsFeed />
+        <div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Newspaper />
+                Fact-Checked News Feed
+              </CardTitle>
+              <CardDescription>
+                A curated feed of short-form, verified news from India published in the last 48 hours.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <NewsFeed />
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
