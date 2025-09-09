@@ -2,7 +2,6 @@ import Header from '@/components/layout/header';
 import TextAnalyzer from '@/components/features/text-analyzer';
 import ImageAnalyzer from '@/components/features/image-analyzer';
 import NewsFeed from '@/components/features/news-feed';
-import TrendsDashboard from '@/components/features/trends-dashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 
@@ -11,8 +10,7 @@ export default function Home() {
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
       <main className="flex flex-1 flex-col gap-8 p-4 md:p-8 container mx-auto">
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+        <div className="w-full">
             <Tabs defaultValue="text" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="text">Text Analyzer</TabsTrigger>
@@ -25,10 +23,6 @@ export default function Home() {
                 <ImageAnalyzer />
               </TabsContent>
             </Tabs>
-          </div>
-          <div className="w-full">
-            <TrendsDashboard />
-          </div>
         </div>
         
         <Separator />
