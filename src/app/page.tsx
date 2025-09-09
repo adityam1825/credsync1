@@ -6,6 +6,7 @@ import AudioAnalyzer from '@/components/features/audio-analyzer';
 import NewsFeed from '@/components/features/news-feed';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import DeepfakeDetector from '@/components/features/deepfake-detector';
 
 export default function Home() {
   return (
@@ -35,6 +36,14 @@ export default function Home() {
             </Tabs>
         </div>
         
+        <Separator />
+
+        <div className="space-y-4">
+            <h2 className="text-3xl font-bold tracking-tight">Deepfake Media Detector</h2>
+            <p className="text-muted-foreground">Upload an image to check if it's AI-generated or manipulated. The AI will perform a forensic analysis to detect inconsistencies.</p>
+            <DeepfakeDetector />
+        </div>
+
         <Separator />
 
         <div className="space-y-4">

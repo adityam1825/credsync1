@@ -5,13 +5,12 @@ import { analyzeImageNewsContent, type AnalyzeImageNewsContentOutput } from '@/a
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, FileWarning, BadgeCheck, UploadCloud, ShieldQuestion, Bot, Wand2, Scale } from 'lucide-react';
+import { Loader2, FileWarning, BadgeCheck, UploadCloud, Sparkles, Scale, ShieldQuestion, Bot, Wand2 } from 'lucide-react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from '@/components/ui/progress';
-
 
 const classificationMap = {
     real: {
@@ -31,13 +30,14 @@ const classificationMap = {
     },
 };
 
-export default function ImageAnalyzer() {
+export default function DeepfakeDetector() {
   const [result, setResult] = useState<AnalyzeImageNewsContentOutput | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const { toast } = useToast();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,11 +83,7 @@ export default function ImageAnalyzer() {
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Image Content Analysis</CardTitle>
-        <CardDescription>Upload an image to analyze its content.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pt-6">
         <div 
             className="relative flex flex-col items-center justify-center w-full p-6 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted"
             onClick={() => fileInputRef.current?.click()}
@@ -102,13 +98,54 @@ export default function ImageAnalyzer() {
             {imagePreview ? (
                 <div className="relative w-full max-w-sm">
                     <Image
+                        ref={imageRef}
                         src={imagePreview}
                         alt="Image preview"
                         width={400}
                         height={300}
+                        onLoad={() => {
+                          // Force re-render to draw bounding boxes after image loads
+                          if (result) {
+                            setResult(JSON.parse(JSON.stringify(result)));
+                          }
+                        }}
                         className="rounded-md object-contain max-h-60"
                         data-ai-hint="uploaded content"
                     />
+                    {result?.tamperedRegions && result.tamperedRegions.map((region, index) => {
+                      const image = imageRef.current;
+                      if (!image || !image.complete || image.naturalWidth === 0) return null;
+
+                      const naturalWidth = image.naturalWidth;
+                      const naturalHeight = image.naturalHeight;
+                      
+                      const displayWidth = image.clientWidth;
+                      const displayHeight = image.clientHeight;
+
+                      // Calculate scale factors
+                      const scaleX = displayWidth / naturalWidth;
+                      const scaleY = displayHeight / naturalHeight;
+                      const scale = Math.min(scaleX, scaleY);
+
+                      const offsetX = (displayWidth - naturalWidth * scale) / 2;
+                      const offsetY = (displayHeight - naturalHeight * scale) / 2;
+
+                      const [x_min, y_min, x_max, y_max] = region.box;
+                      
+                      const left = x_min * scale + offsetX;
+                      const top = y_min * scale + offsetY;
+                      const width = (x_max - x_min) * scale;
+                      const height = (y_max - y_min) * scale;
+                      
+                      return (
+                          <div
+                            key={index}
+                            className="absolute border-2 border-red-500"
+                            style={{ left, top, width, height }}
+                            title={region.description}
+                          />
+                      );
+                    })}
                 </div>
             ) : (
                 <div className="text-center">
@@ -120,14 +157,14 @@ export default function ImageAnalyzer() {
         </div>
         
         <Button onClick={handleSubmit} disabled={loading || !file} className="w-full">
-          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Analyze Image
+          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles />}
+          Detect Manipulation
         </Button>
 
         {loading && (
             <div className="mt-6 flex flex-col items-center justify-center space-y-2 text-center">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                <p className="text-muted-foreground">AI is analyzing the image... this may take a moment.</p>
+                <p className="text-muted-foreground">AI is running forensic analysis... this may take a moment.</p>
             </div>
         )}
         {error && (
@@ -145,12 +182,30 @@ export default function ImageAnalyzer() {
                     {ClassificationIcon && <ClassificationIcon className={`h-6 w-6 text-white ${classificationStyle?.color} rounded-full p-1`} />}
                     Analysis Result: <Badge variant="outline" className={`border-none text-white ${classificationStyle?.color}`}>{classificationStyle?.text}</Badge>
                 </CardTitle>
+                 <div className="pt-2">
+                    <h3 className="text-sm font-medium text-muted-foreground mb-1">Confidence Score</h3>
+                    <div className="flex items-center gap-2">
+                        <Progress value={result.confidenceScore} className="w-full h-2" />
+                        <span className="font-semibold text-sm">{result.confidenceScore}%</span>
+                    </div>
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                  <div>
                     <h3 className="font-semibold flex items-center gap-2 mb-2"><Scale className="h-4 w-4 text-primary" />Reasoning</h3>
                     <p className="text-sm text-muted-foreground">{result.reasoning}</p>
                  </div>
+                 {result.tamperedRegions && result.tamperedRegions.length > 0 && (
+                    <div>
+                        <h3 className="font-semibold flex items-center gap-2 mb-2"><Wand2 className="h-4 w-4 text-primary" />Tampered Regions</h3>
+                        <p className="text-sm text-muted-foreground">The highlighted areas on the image above indicate potential manipulation.</p>
+                        <ul className="list-disc list-inside mt-2 space-y-1">
+                          {result.tamperedRegions.map((region, index) => (
+                            <li key={index} className="text-sm text-muted-foreground">{region.description}</li>
+                          ))}
+                        </ul>
+                    </div>
+                 )}
               </CardContent>
             </Card>
           </div>
