@@ -5,7 +5,6 @@ import UrlAnalyzer from '@/components/features/url-analyzer';
 import AudioAnalyzer from '@/components/features/audio-analyzer';
 import NewsFeed from '@/components/features/news-feed';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
 import DeepfakeDetector from '@/components/features/deepfake-detector';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Newspaper } from 'lucide-react';
