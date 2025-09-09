@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview Analyzes image-based news content to classify it as true, fake, or misleading.
+ * @fileOverview Analyzes image-based news content to classify it as true, fake, or misleading, with a focus on deepfake and manipulation detection.
  *
  * - analyzeImageNewsContent - A function that handles the image analysis process.
  * - AnalyzeImageNewsContentInput - The input type for the analyzeImageNewsContent function.
@@ -20,9 +20,13 @@ const AnalyzeImageNewsContentInputSchema = z.object({
 export type AnalyzeImageNewsContentInput = z.infer<typeof AnalyzeImageNewsContentInputSchema>;
 
 const AnalyzeImageNewsContentOutputSchema = z.object({
-  classification: z.enum(['true', 'fake', 'misleading']).describe('The classification of the news content.'),
-  reasoning: z.string().describe('The reasoning behind the classification.'),
-  manipulationSigns: z.string().optional().describe('Signs of manipulation if present.'),
+  classification: z.enum(['real', 'AI-generated', 'manipulated']).describe('The classification of the image content.'),
+  confidenceScore: z.number().min(0).max(100).describe('The confidence score for the classification, from 0 to 100.'),
+  reasoning: z.string().describe('The reasoning behind the classification, detailing any detected inconsistencies, artifacts, or forensic evidence.'),
+  tamperedRegions: z.array(z.object({
+    box: z.array(z.number()).length(4).describe('Bounding box of the tampered region in [x_min, y_min, x_max, y_max] format.'),
+    description: z.string().describe('Description of the manipulation in this region.'),
+  })).optional().describe('A list of regions identified as potentially tampered with.'),
 });
 export type AnalyzeImageNewsContentOutput = z.infer<typeof AnalyzeImageNewsContentOutputSchema>;
 
@@ -36,12 +40,14 @@ const prompt = ai.definePrompt({
   name: 'analyzeImageNewsContentPrompt',
   input: {schema: AnalyzeImageNewsContentInputSchema},
   output: {schema: AnalyzeImageNewsContentOutputSchema},
-  prompt: `You are an expert in identifying misinformation in news content.
+  prompt: `You are an expert in digital image forensics, specializing in detecting AI-generated images, deepfakes, and photo manipulations.
 
-You will analyze the image provided and determine if the news is true, fake, or misleading.
-Explain your reasoning for the classification.
+Analyze the provided image using forensic techniques (e.g., checking for pixel inconsistency, noise patterns, unnatural lighting, GAN fingerprints).
 
-Also, identify any signs of manipulation in the image, such as the use of AI-generated content or other deceptive techniques.
+1.  **Classify** the image as 'real', 'AI-generated', or 'manipulated'.
+2.  Provide a **confidence score** (0-100) for your classification.
+3.  Give detailed **reasoning** for your analysis.
+4.  If manipulated, identify the **tampered regions** with bounding boxes and a description of what was altered.
 
 Image: {{media url=photoDataUri}}`,
 });
