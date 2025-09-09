@@ -14,6 +14,8 @@ const mockNews: NewsArticle[] = [
     category: 'Technology',
     imageUrl: 'https://picsum.photos/600/400?random=1',
     aiHint: 'tech summit',
+    publishedAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+    origin: 'India',
   },
   {
     id: 2,
@@ -22,14 +24,18 @@ const mockNews: NewsArticle[] = [
     category: 'Science',
     imageUrl: 'https://picsum.photos/600/400?random=2',
     aiHint: 'wind turbines',
+    publishedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+    origin: 'USA',
   },
   {
     id: 3,
-    title: 'International Space Station to Host First Tourist Spacewalk',
-    summary: 'In a historic first, a civilian will join astronauts for a spacewalk outside the ISS, opening a new era for space tourism.',
+    title: 'Indian Space Research Organisation (ISRO) Launches New Satellite',
+    summary: 'ISRO successfully launched its latest communication satellite, which will enhance connectivity across the subcontinent.',
     category: 'Space',
     imageUrl: 'https://picsum.photos/600/400?random=3',
-    aiHint: 'astronaut space',
+    aiHint: 'rocket launch',
+    publishedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
+    origin: 'India',
   },
   {
     id: 4,
@@ -38,6 +44,8 @@ const mockNews: NewsArticle[] = [
     category: 'Politics',
     imageUrl: 'https://picsum.photos/600/400?random=4',
     aiHint: 'government building',
+    publishedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+    origin: 'UK',
   },
     {
     id: 5,
@@ -46,14 +54,18 @@ const mockNews: NewsArticle[] = [
     category: 'History',
     imageUrl: 'https://picsum.photos/600/400?random=5',
     aiHint: 'underwater ruins',
+    publishedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
+    origin: 'Greece',
   },
   {
     id: 6,
-    title: 'New Study Reveals Surprising Benefits of Urban Green Spaces',
+    title: 'Mumbai Announces Major Urban Green Spaces Initiative',
     summary: 'Living near parks and green areas is linked to significant improvements in mental health and cognitive function, a decade-long study finds.',
     category: 'Health',
     imageUrl: 'https://picsum.photos/600/400?random=6',
     aiHint: 'city park',
+    publishedAt: new Date(Date.now() - 40 * 60 * 60 * 1000), // 40 hours ago
+    origin: 'India',
   },
 ];
 
@@ -73,17 +85,24 @@ export default function NewsFeed() {
   const [articles, setArticles] = useState(mockNews);
 
   const filteredNews = useMemo(() => {
-    if (!searchQuery) {
-      return articles;
-    }
-    return articles.filter(
-      (article) =>
-        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.summary.toLowerCase().includes(searchQuery.toLowerCase())
+    const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000);
+    
+    let filtered = articles.filter(article => 
+        article.origin === 'India' && article.publishedAt > fortyEightHoursAgo
     );
+
+    if (searchQuery) {
+        filtered = filtered.filter(
+            (article) =>
+            article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            article.summary.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }
+    return filtered;
   }, [searchQuery, articles]);
   
   const handleRefresh = () => {
+    // Shuffling the original list to simulate a refresh
     setArticles(shuffleArray(mockNews));
   };
 
@@ -112,8 +131,8 @@ export default function NewsFeed() {
         </div>
         {filteredNews.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
-                <p>No articles found for "{searchQuery}".</p>
-                <p className="text-sm">Try a different search term.</p>
+                <p>No recent articles from India found{searchQuery ? ` for "${searchQuery}"` : ''}.</p>
+                <p className="text-sm">Try a different search term or check back later.</p>
             </div>
         )}
     </div>

@@ -14,6 +14,8 @@ export interface NewsArticle {
   category: string;
   imageUrl: string;
   aiHint: string;
+  publishedAt: Date;
+  origin: string;
 }
 
 interface NewsCardProps {
