@@ -6,7 +6,10 @@ export default function Header() {
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="flex items-center space-x-2">
           <ShieldCheck className="h-6 w-6 text-primary" />
-          <span className="font-bold text-lg">Verity Insights</span>
+          <div className="flex flex-col">
+            <span className="font-bold text-lg">CredenSync</span>
+            <p className="text-xs text-muted-foreground">Syncing credibility with AI.</p>
+          </div>
         </div>
       </div>
     </header>

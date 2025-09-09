@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Verity Insights',
-  description: 'AI-powered misinformation detection and education platform.',
+  title: 'CredenSync',
+  description: 'Syncing credibility with AI.',
 };
 
 export default function RootLayout({
