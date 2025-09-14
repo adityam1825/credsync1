@@ -15,35 +15,36 @@ export default function Home() {
       <Header />
       <main className="flex-1 space-y-8 p-4 md:p-8 container mx-auto">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
-          <Card className="lg:col-span-3">
-            <CardHeader>
-                <CardTitle>Analysis Tools</CardTitle>
-                <CardDescription>Select a tool to analyze content for misinformation.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="text" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-                  <TabsTrigger value="text">Text</TabsTrigger>
-                  <TabsTrigger value="image">Image</TabsTrigger>
-                  <TabsTrigger value="url">URL</TabsTrigger>
-                  <TabsTrigger value="audio">Audio</TabsTrigger>
-                </TabsList>
-                <TabsContent value="text">
-                  <TextAnalyzer />
-                </TabsContent>
-                <TabsContent value="image">
-                  <ImageAnalyzer />
-                </TabsContent>
-                <TabsContent value="url">
-                  <UrlAnalyzer />
-                </TabsContent>
-                <TabsContent value="audio">
-                  <AudioAnalyzer />
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-
+          <div className="lg:col-span-3 space-y-8">
+            <Card>
+              <CardHeader>
+                  <CardTitle>Analysis Tools</CardTitle>
+                  <CardDescription>Select a tool to analyze content for misinformation.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="text" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+                    <TabsTrigger value="text">Text</TabsTrigger>
+                    <TabsTrigger value="image">Image</TabsTrigger>
+                    <TabsTrigger value="url">URL</TabsTrigger>
+                    <TabsTrigger value="audio">Audio</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="text">
+                    <TextAnalyzer />
+                  </TabsContent>
+                  <TabsContent value="image">
+                    <ImageAnalyzer />
+                  </TabsContent>
+                  <TabsContent value="url">
+                    <UrlAnalyzer />
+                  </TabsContent>
+                  <TabsContent value="audio">
+                    <AudioAnalyzer />
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+          </div>
           <div className="lg:col-span-2">
             <DeepfakeDetector />
           </div>

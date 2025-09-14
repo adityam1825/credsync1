@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Flag } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+
 
 export interface NewsArticle {
   id: number;
@@ -32,20 +34,25 @@ export default function NewsCard({ article }: NewsCardProps) {
     });
   };
 
+  const publishedAt = formatDistanceToNow(new Date(article.publishedAt), { addSuffix: true });
+
   return (
-    <Card className="flex flex-col overflow-hidden h-full hover:shadow-lg transition-shadow duration-300">
-      <div className="relative w-full h-48">
+    <Card className="flex flex-col overflow-hidden h-full hover:border-primary/20 transition-all duration-300 group">
+      <div className="relative w-full h-48 overflow-hidden">
         <Image
           src={article.imageUrl}
           alt={article.title}
           width={600}
           height={400}
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
           data-ai-hint={article.aiHint}
         />
       </div>
       <CardHeader>
-        <Badge variant="secondary" className="w-fit mb-2">{article.category}</Badge>
+        <div className="flex justify-between items-center">
+            <Badge variant="secondary" className="w-fit">{article.category}</Badge>
+            <p className="text-xs text-muted-foreground">{publishedAt}</p>
+        </div>
         <CardTitle className="text-lg leading-tight">{article.title}</CardTitle>
       </CardHeader>
       <CardContent className="flex-grow">

@@ -82,14 +82,17 @@ export default function DeepfakeDetector() {
   const classificationStyle = result ? classificationMap[result.classification] : null;
 
   return (
-    <Card className="w-full h-full">
+    <Card className="w-full h-full border-primary/20 bg-gradient-to-br from-card to-secondary">
         <CardHeader>
-            <CardTitle className="text-2xl">Deepfake Detector</CardTitle>
-            <CardDescription>Upload an image to check if it's AI-generated or manipulated.</CardDescription>
+            <CardTitle className="text-2xl flex items-center gap-2">
+                <Sparkles className="text-primary" />
+                Deepfake Detector
+            </CardTitle>
+            <CardDescription>Forensic analysis for AI-generated or manipulated images.</CardDescription>
         </CardHeader>
       <CardContent className="space-y-4">
         <div 
-            className="relative flex flex-col items-center justify-center w-full p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted"
+            className="relative flex flex-col items-center justify-center w-full p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50"
             onClick={() => fileInputRef.current?.click()}
         >
             <Input
@@ -144,7 +147,7 @@ export default function DeepfakeDetector() {
                       return (
                           <div
                             key={index}
-                            className="absolute border-2 border-red-500"
+                            className="absolute border-2 border-red-500/80 backdrop-saturate-200"
                             style={{ left, top, width, height }}
                             title={region.description}
                           />
@@ -166,7 +169,7 @@ export default function DeepfakeDetector() {
         </Button>
 
         {loading && (
-            <div className="flex flex-col items-center justify-center space-y-2 text-center">
+            <div className="flex flex-col items-center justify-center space-y-2 text-center py-4">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 <p className="text-muted-foreground">AI is running forensic analysis...</p>
             </div>
