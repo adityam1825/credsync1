@@ -14,7 +14,7 @@ export default function Home() {
     <div className="flex min-h-screen w-full flex-col bg-background">
       <Header />
       <main className="flex-1 space-y-8 p-4 md:p-8 container mx-auto">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5 animate-in fade-in-50 duration-500">
           <div className="lg:col-span-3 space-y-8">
             <Card>
               <CardHeader>
@@ -50,7 +50,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div>
+        <div className="animate-in fade-in-50 duration-500 delay-200">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

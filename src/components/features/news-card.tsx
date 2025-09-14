@@ -37,7 +37,7 @@ export default function NewsCard({ article }: NewsCardProps) {
   const publishedAt = formatDistanceToNow(new Date(article.publishedAt), { addSuffix: true });
 
   return (
-    <Card className="flex flex-col overflow-hidden h-full hover:border-primary/20 transition-all duration-300 group">
+    <Card className="flex flex-col overflow-hidden h-full hover:border-primary/40 transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
       <div className="relative w-full h-48 overflow-hidden">
         <Image
           src={article.imageUrl}
