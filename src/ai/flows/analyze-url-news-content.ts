@@ -41,7 +41,7 @@ const analyzeUrlNewsContentFlow = ai.defineFlow(
   async input => {
     const {output} = await prompt(input);
     if (!output) {
-      throw new Error('Analysis failed to produce an output.');
+      throw new Error('Analysis failed to produce an output. The URL might be inaccessible or the content could not be processed.');
     }
     return output;
   }
