@@ -38,8 +38,9 @@ export default function NewsCard({ article }: NewsCardProps) {
         <Image
           src={article.imageUrl}
           alt={article.title}
-          fill
-          className="object-cover"
+          width={600}
+          height={400}
+          className="object-cover w-full h-full"
           data-ai-hint={article.aiHint}
         />
       </div>
