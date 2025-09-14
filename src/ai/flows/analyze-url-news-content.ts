@@ -40,6 +40,9 @@ const analyzeUrlNewsContentFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error('Analysis failed to produce an output.');
+    }
+    return output;
   }
 );
